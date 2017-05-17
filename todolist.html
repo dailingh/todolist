@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>toDoList</title>
+	<style>
+		#box{
+			position: relative;
+			width: 300px;
+			height: 400px;
+			border: black solid 1px;
+			border-radius: 20px;
+		}
+		#edbox{
+			/*position: absolute;*/
+			width: 280px;
+			height: 30px;
+			border: black solid 1px;
+			margin: 30px 10px 10px;
+			box-sizing: border-box;
+		}
+		#title{
+			text-align: center;
+			width: 100px;
+			height: 50px;
+			padding: 0 100px;
+			font-size: 20px;
+			line-height: 50px;
+		}
+		#finish{
+			position: absolute;
+			width: 50px;
+			height: 20px;
+			right: 10px;
+		}
+		#edit{
+			position: absolute;
+			width: 50px;
+			height: 20px;
+			left: 10px;
+		}
+		.li{
+			list-style-type: none;
+			/*display: inline-block;*/
+			margin-top: 5px;
+
+		}
+		/*li::before{
+			content: '';
+			background-image: url(unsele.png);
+			background-size: 50px 50px;
+			width: 10px;
+			height: 10px;
+		}*/
+		.deleteli{
+			/*position: absolute;*/
+			/*right: 45px;*/
+			display: inline-block;
+			margin-right: 10px;
+			display: none;
+			cursor:pointer;
+		}
+		.blackstar{
+			width: 20px;
+			height: 20px;
+			/*position: absolute;*/
+			/*float: right;*/
+			/*right: 20px;*/
+		}
+		.redstar{
+			width: 20px;
+			height: 20px;
+			/*position: absolute;*/
+			/*right: 20px;*/
+		}
+
+		span.done {
+			text-decoration: line-through;
+		}
+		#canceledit{
+			width: 50px;
+			height: 20px;
+			position: absolute;
+			right: 10px;
+			bottom: 10px;
+		}
+		#list{
+			padding-left: 20px;
+
+		}
+		#listdiv{
+			height: 200px;
+			overflow: auto;
+			/*width: 270px;*/
+		}
+		.listline{
+			vertical-align: middle;
+		}
+		.textli{
+			display: inline-block;
+			width: 150px;
+			margin-right: 20px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<div id="title">work</div>
+		<button id="edit">edit</button>
+		<button id="finish">finish</button>
+		<input type="" name="" id="edbox"></input>
+
+		<div id="listdiv">
+			<ul id="list">
+
+			</ul>
+		</div>
+		
+		<button id="canceledit">cancel</button>
+	</div>
+
+
+	<script>
+		var finish = document.getElementById("finish");
+		var edbox = document.getElementById("edbox");
+		var list = document.getElementById("list");
+		var box = document.getElementById("box");
+		var edit = document.getElementById("edit");
+		var canceledit = document.getElementById("canceledit");
+		var i = 0;
+
+			var Cont = function () {
+			// var tpl = `<li class = "li"></li>`;
+
+
+			if(edbox.value.trim() !== ""){
+				var tpl = document.createElement("li");
+				tpl.className = "li";
+				list.appendChild(tpl);
+				var words = edbox.value;
+				var li = document.getElementsByClassName("li");
+				// li[i].innerText = words;
+				var listline = document.createElement("input");
+				// list.insertBefore(listline,null);
+				listline.type = "checkbox";
+				listline.className = "listline";
+				tpl.insertBefore(listline, tpl.firstChild);
+				var star = document.createElement("img");
+				star.src = "black.png";
+				star.className = "blackstar";
+				tpl.insertBefore(star, null);
+				var deletetext = document.createElement("span");
+				deletetext.className = "deleteli";
+				deletetext.innerText = "delete";
+				var litext = document.createElement("span");
+				litext.className = "textli";
+				litext.innerText = words;
+				tpl.insertBefore(deletetext, tpl.lastChild);
+				tpl.insertBefore(litext, deletetext);
+
+
+
+				
+
+
+				
+
+
+
+			// console.log(tpl.firstChild);
+			// console.log(tpl.innerText);
+
+			edbox.value = "";
+
+			// li.list-style-type = none;
+			i++;
+			}
+		}
+		finish.addEventListener("click",Cont);
+
+		// console.log(li[0]);
+		// var che = document.getElementsByClassName("listline");
+		// if (che[i].checked) {
+		// 	li.style.textDecoration = "line-through";
+		// }
+		var li = document.getElementsByClassName("li");
+		var Rev = function (e) {
+			// box.style.display = "none";
+			if (e.target.tagName.toLowerCase() === 'input') {
+				// console.log(e.target.innerText);
+				if (e.target.checked) {
+					// do nothing
+					console.log(e.target.nextSibling.classList)
+					e.target.nextSibling.classList.add('done');
+				} else {
+					e.target.nextSibling.classList.remove('done');
+				}
+				// e.target.classList.add('done');
+			}
+		}
+		list.addEventListener("click",Rev);
+		
+		var Rank = function (e) {
+			if(e.target.tagName.toLowerCase() === "img"){
+				if(e.target.className ==="blackstar"){
+					e.target.src = "red.png";
+					// e.target.classList.remove("blackstar");
+					// e.target.classList.add("redstar");
+					e.target.className = "redstar";
+					var important = e.target.parentNode;
+					list.removeChild(e.target.parentNode);
+					list.insertBefore(important,list.firstChild);
+				}else{
+					e.target.src = "black.png";
+					e.target.className = "blackstar";
+				}
+			}
+		}
+		list.addEventListener("click",Rank);
+
+
+		if(list.innerHTML!==""){
+			var li = document.getElementsByClassName("li");
+			var listline = document.getElementsByClassName("listline");
+			var Reedit = function (e) {
+				edbox.value = e.target.innerText;
+				edbox.focus();
+			}
+			list.addEventListener("click",Reedit);
+		}
+		if(list.innerHTML!==""){
+			var Deletelist =  function () {
+				var li = document.getElementsByClassName("li");
+				var listline = document.getElementsByClassName("listline");
+				var deleteli = document.getElementsByClassName("deleteli");
+				// li.removeChild(listline);
+				for(i = 0;i < li.length;i++){
+					li[i].removeChild(listline[0]);
+					deleteli[i].style.display = "inline-block";
+				}
+				list.addEventListener("click",function (e) {
+					if (e.target.innerText === "delete") {
+						list.removeChild(e.target.parentNode);
+					}
+				})
+				list.removeEventListener("click",Reedit);
+				list.removeEventListener("click",Rank);
+				finish.removeEventListener("click",Cont);
+				// finish.addEventListener("click",function () {
+				// 	edit.removeEventListener("click",Deletelist);
+				// })
+			}
+			edit.addEventListener("click",Deletelist);
+			
+			var Canceldelete = function () {
+				var li = document.getElementsByClassName("li");
+				var listline = document.getElementsByClassName("listline");
+				var deleteli = document.getElementsByClassName("deleteli");
+				// li.removeChild(listline);
+
+				for(i = 0;i < li.length;i++){
+
+					// li[i].appendChild(listline[0]);
+					console.log(li[i].firstChild.tagName);
+					if(li[i].firstChild.tagName!== "INPUT"){
+						var listline = document.createElement("input");
+						listline.type = "checkbox";
+						listline.className = "listline";
+						li[i].insertBefore(listline,li[i].firstChild);
+						deleteli[i].style.display = "none";
+
+					}
+				}
+				// if(list.innerHTML!==""){
+				// 	var li = document.getElementsByClassName("li");
+				// 	for(i = 0;i < li.length;i++){
+				// 		if(li[i].className.contains("done")){
+				// 			li[i].firstChild.checked = true;
+				// 		}
+				// 	}
+				// }
+				list.addEventListener("click",Reedit);
+				list.addEventListener("click",Rank);
+				finish.addEventListener("click",Cont);
+			}
+			canceledit.addEventListener("click",Canceldelete);
+		}
+
+
+
+
+
+
+
+
+
+
+	</script>
+</body>
+</html>
+<!--
+1、list排序
+2、重新编辑
+3、添加日期、时间、以及闹钟、子任务等等
+4、删除任务
+5、关闭储存功能，编辑框储存功能 -->
